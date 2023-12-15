@@ -49,20 +49,22 @@ if(isBlank(cells.CategoryScientificName.value), "", "[[Category:" + cells.Catego
 Like the field data, this only adds the category to the Wikitext if you’ve got a value to fill it in.
 
 ## Full GREL instruction used by Te Papa with TePapaColl template
+TePapaColl inherits from the {{Information}} template, so it needs to include `description`, `date`, `author` and `source` fields.
 ```
 "== {{int:filedesc}} ==\n" +
 "{{TePapaColl\n" +
+"|description=" + cells.description.value + "\n" +
+"|date=" + cells.date.value + "\n" +
+"|author=" + cells.author.value + "\n" +
+"|source=" + cells.source.value + "\n" +
 if(isBlank(cells.title.value), "", "|title=" + cells.title.value + "\n") +
-if(isBlank(cells.description.value), "", "|description=" + cells.description.value + "\n") +
-if(isBlank(cells.mātaurangaMāori.value), "", "|MātaurangaMāori=" + cells.MātaurangaMāori.value + "\n") +
-if(isBlank(cells.creator.value), "", "|creator=" + cells.creator.value + "\n") +
-if(isBlank(cells.dateCreated.value), "", "|dateCreated=" + cells.dateCreated.value + "\n") +
+if(isBlank(cells.mātaurangaMāori.value), "", "|MātaurangaMāori=" + cells.mātaurangaMāori.value + "\n") +
 if(isBlank(cells.placeCreated.value), "", "|placeCreated=" + cells.placeCreated.value + "\n") +
 if(isBlank(cells.madeOf.value), "", "|madeOf=" + cells.madeOf.value + "\n") +
 if(isBlank(cells.depicts.value), "", "|depicts=" + cells.depicts.value + "\n") +
 if(isBlank(cells.basisOfRecord.value), "", "|basisOfRecord=" + cells.basisOfRecord.value + "\n") +
 if(isBlank(cells.vernacularName.value), "", "|vernacularName=" + cells.vernacularName.value + "\n") +
-if(isBlank(cells.qualifiedName.value), "", "|QualifiedName=" + cells.QualifiedName.value + "\n") +
+if(isBlank(cells.qualifiedName.value), "", "|QualifiedName=" + cells.qualifiedName.value + "\n") +
 if(isBlank(cells.typeStatus.value), "", "|typeStatus=" + cells.typeStatus.value + "\n") +
 if(isBlank(cells.identifiedBy.value), "", "|identifiedBy=" + cells.identifiedBy.value + "\n") +
 if(isBlank(cells.genusVernacularName.value), "", "|genusVernacularName=" + cells.genusVernacularName.value + "\n") +
@@ -77,7 +79,6 @@ if(isBlank(cells.depth.value), "", "|depth=" + cells.depth.value + "\n") +
 if(isBlank(cells.institutionCode.value), "", "|institutionCode=" + cells.institutionCode.value + "\n") +
 if(isBlank(cells.institution.value), "", "|institution=" + cells.institution.value + "\n") +
 if(isBlank(cells.identifier.value), "", "|identifier=" + cells.identifier.value + "\n") +
-if(isBlank(cells.references.value), "", "|references=" + cells.references.value + "\n") +
 if(isBlank(cells.creditLine.value), "", "|creditLine=" + cells.creditLine.value + "\n") +
 "}}\n" +
 "=={{int:license-header}}==\n" +
