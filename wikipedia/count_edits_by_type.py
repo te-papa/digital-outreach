@@ -21,12 +21,12 @@ end_date = "20240930"
 # Under each category, list the summary and tag strings that will
 # mark the edit as relevant
 categories = {"sdc":
-	              {"summary": ["Created claim:", "Changed label,"],
+	              {"summary": ["wbsetclaim-create", "wbeditentity"],
 	               "tags": []
 	               },
               "new_image":
-	              {"summary": ["Uploaded a work"],
-	               "tags": ["openrefine"]
+	              {"summary": ["Uploaded a work", "Uploaded own work"],
+	               "tags": ["openrefine", "uploadwizard"]
 	               },
               "edit_metadata":
 	              {"summary": ["Changed an entity"],
