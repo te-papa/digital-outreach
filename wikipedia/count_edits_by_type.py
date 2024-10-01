@@ -7,6 +7,7 @@
 # doesn't provide them.
 
 from pywikibot import Site, User
+from pywikibot.data import api
 from datetime import datetime
 
 # List all usernames you want to check
@@ -20,12 +21,12 @@ end_date = "20240930"
 # Under each category, list the summary and tag strings that will
 # mark the edit as relevant
 categories = {"sdc":
-	              {"summary": ["Created claim:", "Changed label,"],
+	              {"summary": ["wbsetclaim-create", "wbeditentity"],
 	               "tags": []
 	               },
               "new_image":
-	              {"summary": ["Uploaded a work"],
-	               "tags": ["openrefine"]
+	              {"summary": ["Uploaded a work", "Uploaded own work"],
+	               "tags": ["openrefine", "uploadwizard"]
 	               },
               "edit_metadata":
 	              {"summary": ["Changed an entity"],
@@ -57,8 +58,17 @@ def retrieve_user_contributions(site, username):
 	start_datestamp = datetime.fromisoformat(start_date)
 	end_datestamp = datetime.fromisoformat(end_date)
 	# Reversed because you start at the present and work backwards
-	# If you're not getting all the contributions, add the parameter total=n eg total=1000
-	contributions = user.contributions(start=end_datestamp, end=start_datestamp)
+	contributions = api.ListGenerator(
+		'usercontribs',
+		site=site,
+		parameters=dict(
+			ucprop='ids|title|timestamp|comment|flags|tags',
+			ucuser=username,
+			ucstart=end_datestamp,
+			ucend=start_datestamp,
+		)
+	)
+	contributions.set_maximum_items(10000)
 
 	return contributions
 
@@ -80,19 +90,21 @@ def review_activity(activity):
 # if any of the relevant strings appear
 def analyse_user_activity(contributions):
 	report = {k: [] for k in categories.keys()}
-	for page, oldid, ts, comment in contributions:
+	for contribution in contributions:
+		title = contribution['title']
+		comment = contribution['comment']
+		tags = "|".join(contribution['tags'])
 		for cat in categories.keys():
 			count = False
 			for summary_string in categories[cat]["summary"]:
 				if summary_string in comment:
 					count = True
-			# Needs to be changed! Currently not returning revision tags to be checked
 			for tag_string in categories[cat]["tags"]:
-				if tag_string in comment:
+				if tag_string in tags:
 					count = True
 
 			if count:
-				report[cat].append(page.title)
+				report[cat].append(title)
 
 	return report
 
